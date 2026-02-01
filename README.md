@@ -67,12 +67,43 @@ Untuk membuat file `.apk` yang bisa diinstall langsung di HP:
     npx eas-cli login
     ```
 
-3.  **Build**
+3.  **PENTING: Uncomment firebase.js untuk Build**
+    
+    Karena `firebase.js` di-gitignore (untuk keamanan), EAS tidak bisa akses file ini saat build. Sebelum build, lakukan:
+    
+    *   Buka `.gitignore`
+    *   Cari baris: `src/config/firebase.js`
+    *   Tambahkan `#` di depannya: `# src/config/firebase.js`
+    *   Simpan file
+
+4.  **Build**
     ```bash
     npx eas-cli build -p android --profile preview
     ```
     *   Tunggu proses build selesai (bisa dipantau di link yang muncul).
     *   Download file `.apk` dan install di HP.
+
+5.  **PENTING: Kembalikan Gitignore**
+    
+    Setelah build selesai, **segera** kembalikan `.gitignore`:
+    *   Hapus `#` di depan `src/config/firebase.js`
+    *   Simpan file
+    *   Baru push ke GitHub
+
+## 🍎 Cara Build iOS (iPhone)
+
+Untuk iOS, prosesnya sedikit berbeda karena aturan ketat Apple:
+
+1.  **Build untuk Simulator (Gratis, Tanpa Akun Developer Berbayar)**
+    *   Command: `npx eas-cli build -p ios --profile preview`
+    *   Output: File yang bisa dijalankan di Xcode Simulator (Mac).
+
+2.  **Build untuk Install di HP (Perlu Akun Developer Apple $99/tahun)**
+    *   Anda perlu memiliki **Apple Developer Account**.
+    *   Ubah `eas.json`: Hapus baris `"simulator": true` pada bagian `preview > ios`.
+    *   Jalankan build, dan ikuti instruksi EAS untuk upload sertifikat Apple ID Anda.
+
+> **Catatan Windows**: Karena Anda menggunakan Windows, Anda **sangat disarankan** menggunakan EAS Build (Cloud) seperti di atas, karena Windows tidak bisa menjalankan Xcode untuk build manual.
 
 ## 🔒 Keamanan
 
